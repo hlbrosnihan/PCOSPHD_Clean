@@ -636,7 +636,7 @@ export function MappingToolSurvey() {
               causing all tab buttons to stack vertically.
               Using CSS grid directly with inline style is the safe workaround.
             */}
-            <div style={{ display: "grid", gridTemplateColumns: `repeat(${SECTIONS.length}, 1fr)`, gap: "4px" }}>
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(12, 1fr)", gap: "4px" }}>
               {SECTIONS.map(({ label, Icon }, i) => {
                 const state = i === currentSection ? "active" : i < currentSection ? "done" : "future";
                 // Inline styles for background/border — avoids dynamic Tailwind class issues
