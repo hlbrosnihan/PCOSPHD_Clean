@@ -394,24 +394,21 @@ function MappingToolModal({ isOpen, modalWidth, onClose }: ModalProps) {
 
         {/*
           ── TOOL CONTENT ─────────────────────────────────────────────────────
-          Currently renders the placeholder. When the real embed is ready:
-
-          Replace <PlaceholderTool /> with:
-
-            <iframe
-              ref={iframeRef}
-              src="/pcosphd_mapping_vN_embed.html"
-              title="PCOS Lived Experience Mapping Tool"
-              onLoad={handleIframeLoad}
-              className="flex-1 w-full border-0"
-              style={{ minHeight: 0 }}
-              allow="clipboard-write"
-            />
-
-          The handleIframeLoad and postMessage zoom logic above are already
-          wired — no other changes needed.
+          iframe points to /mapper/index.html — the separately deployed
+          Care Ecosystem Mapper build in public_html/mapper/.
+          allow="clipboard-write; microphone" enables PDF share + voice dictation.
+          onLoad fires handleIframeLoad which sends the setZoom postMessage.
+          toolDone postMessage (from mapper's Done button) is handled in the
+          useEffect above — calls onClose which sets toolCompleted=true.
           ─────────────────────────────────────────────────────────────────── */}
-        <PlaceholderTool />
+        <iframe
+          ref={iframeRef}
+          src="/mapper/index.html"
+          title="Care Ecosystem Mapper"
+          onLoad={handleIframeLoad}
+          allow="clipboard-write; microphone"
+          style={{ flex: 1, width: "100%", border: "none", minHeight: 0 }}
+        />
 
         {/* Modal footer — second always-visible done button */}
         <div className="flex items-center justify-between px-4 py-2 bg-white border-t border-gray-100 flex-shrink-0">
@@ -625,7 +622,7 @@ export function MappingToolSurvey() {
               <span className="text-sm text-gray-500">{SECTIONS[currentSection].label}</span>
               <span className="text-sm font-medium text-teal-600">{progressPct}% complete</span>
             </div>
-            <div className="w-full bg-gray-200 rounded-full mb-5" style={{ height: "6px" }}>
+            <div className="w-full bg-gray-200 rounded-full" style={{ height: "6px", marginBottom: "16px" }}>
               <div className="bg-teal-600 rounded-full transition-all duration-300"
                 style={{ height: "6px", width: `${progressPct}%` }} />
             </div>
@@ -636,7 +633,7 @@ export function MappingToolSurvey() {
               causing all tab buttons to stack vertically.
               Using CSS grid directly with inline style is the safe workaround.
             */}
-            <div style={{ display: "grid", gridTemplateColumns: "repeat(12, 1fr)", gap: "4px" }}>
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(12, 1fr)", gap: "4px", marginTop: "16px" }}>
               {SECTIONS.map(({ label, Icon }, i) => {
                 const state = i === currentSection ? "active" : i < currentSection ? "done" : "future";
                 // Inline styles for background/border — avoids dynamic Tailwind class issues
